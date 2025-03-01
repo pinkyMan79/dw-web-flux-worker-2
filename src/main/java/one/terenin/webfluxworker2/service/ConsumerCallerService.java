@@ -5,6 +5,8 @@ import one.terenin.webfluxworker2.dto.DataBundle;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,28 +19,76 @@ public class ConsumerCallerService {
     private final WebClient webClientJson;
     private final WebClient webClientParquet;
 
-    public Optional<DataBundle> getOneDataBundleJson() {
-        return Optional.empty();
+    public Mono<DataBundle> getOneDataBundleJson() {
+        WebClient.RequestHeadersUriSpec<?> requestHeadersUriSpec = webClientJson.get();
+        requestHeadersUriSpec.uri("/sized/json/1");
+        return requestHeadersUriSpec.exchangeToMono(resp -> {
+            if (resp.statusCode().is2xxSuccessful()) {
+                return resp.bodyToMono(DataBundle.class);
+            } else {
+                return Mono.error(new RuntimeException("Non 2xx response: " + resp.statusCode()));
+            }
+        });
     }
 
-    public Optional<List<DataBundle>> getManyDataBundleJson() {
-        return Optional.empty();
+    public Flux<DataBundle> getManyDataBundleJson() {
+        WebClient.RequestHeadersUriSpec<?> requestHeadersUriSpec = webClientJson.get();
+        requestHeadersUriSpec.uri("/stream/string");
+        return requestHeadersUriSpec.exchangeToFlux(resp -> {
+            if (resp.statusCode().is2xxSuccessful()) {
+                return resp.bodyToFlux(DataBundle.class);
+            } else {
+                return Flux.error(new RuntimeException("Non 2xx response: " + resp.statusCode()));
+            }
+        });
     }
 
-    public Optional<List<DataBundle>> getSizedDataBundleJson(int packetSize) {
-        return Optional.empty();
+    public Flux<DataBundle> getSizedDataBundleJson(int packetSize) {
+        WebClient.RequestHeadersUriSpec<?> requestHeadersUriSpec = webClientJson.get();
+        requestHeadersUriSpec.uri("/sized/json/" + packetSize);
+        return requestHeadersUriSpec.exchangeToFlux(resp -> {
+            if (resp.statusCode().is2xxSuccessful()) {
+                return resp.bodyToFlux(DataBundle.class);
+            } else {
+                return Flux.error(new RuntimeException("Non 2xx response: " + resp.statusCode()));
+            }
+        });
     }
 
-    public Optional<byte[]> getOneDataBundleParquet() {
-        return Optional.empty();
+    public Mono<byte[]> getOneDataBundleParquet() {
+        WebClient.RequestHeadersUriSpec<?> requestHeadersUriSpec = webClientJson.get();
+        requestHeadersUriSpec.uri("/sized/json/1");
+        return requestHeadersUriSpec.exchangeToMono(resp -> {
+            if (resp.statusCode().is2xxSuccessful()) {
+                return resp.bodyToMono(byte[].class);
+            } else {
+                return Mono.error(new RuntimeException("Non 2xx response: " + resp.statusCode()));
+            }
+        });
     }
 
-    public Optional<List<byte[]>> getManyDataBundleParquet() {
-        return Optional.empty();
+    public Flux<byte[]> getManyDataBundleParquet() {
+        WebClient.RequestHeadersUriSpec<?> requestHeadersUriSpec = webClientJson.get();
+        requestHeadersUriSpec.uri("/stream/string");
+        return requestHeadersUriSpec.exchangeToFlux(resp -> {
+            if (resp.statusCode().is2xxSuccessful()) {
+                return resp.bodyToFlux(byte[].class);
+            } else {
+                return Flux.error(new RuntimeException("Non 2xx response: " + resp.statusCode()));
+            }
+        });
     }
 
-    public Optional<List<byte[]>> getSizedDataBundleParquet(int packetSize) {
-        return Optional.empty();
+    public Flux<byte[]> getSizedDataBundleParquet(int packetSize) {
+        WebClient.RequestHeadersUriSpec<?> requestHeadersUriSpec = webClientJson.get();
+        requestHeadersUriSpec.uri("/sized/json/" + packetSize);
+        return requestHeadersUriSpec.exchangeToFlux(resp -> {
+            if (resp.statusCode().is2xxSuccessful()) {
+                return resp.bodyToFlux(byte[].class);
+            } else {
+                return Flux.error(new RuntimeException("Non 2xx response: " + resp.statusCode()));
+            }
+        });
     }
 
 }

@@ -1,5 +1,8 @@
 package one.terenin.webfluxworker2.service.base;
 
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -12,13 +15,12 @@ public interface ImitatorContract<DATATYPE> {
 
     Optional<DATATYPE> getDataType();
 
-    Stream<DATATYPE> getDataTypes();
-    Stream<DATATYPE> getDataTypesWithMapping();
-    Stream<DATATYPE> getDataTypesWithFiltering();
-
     Consumer<DATATYPE> iteratorConsumer();
     Function<DATATYPE, ?> dataTypeMapper();
     Predicate<DATATYPE> dataTypeFilteringPredicate();
+
+    Mono<DATATYPE> processMono(Mono<DATATYPE> mono);
+    Flux<DATATYPE> processFlux(Flux<DATATYPE> mono);
 
 
 }
