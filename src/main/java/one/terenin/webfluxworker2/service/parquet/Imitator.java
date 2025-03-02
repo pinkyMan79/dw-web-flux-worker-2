@@ -1,6 +1,5 @@
 package one.terenin.webfluxworker2.service.parquet;
 
-import lombok.RequiredArgsConstructor;
 import one.terenin.webfluxworker2.dto.DataBundle;
 import one.terenin.webfluxworker2.service.base.ImitatorContract;
 import one.terenin.webfluxworker2.service.parquet.util.AvroSchemaProvider;
